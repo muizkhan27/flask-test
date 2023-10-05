@@ -1,0 +1,99 @@
+{% extends "base.html" %} {% block title %}ToDo App{% endblock %} {% block
+content %}
+<div class="container">
+  <h1 class="mt-5">To-Do List</h1>
+  <form method="POST" action="/add" style="padding-bottom: 5%">
+    <div class="form-row">
+      <div class="col-md-6">
+        <input
+          type="text"
+          name="content"
+          class="form-control"
+          placeholder="Todo"
+          required="true"
+        />
+      </div>
+      <div class="col-md-3">
+        <input
+          type="date"
+          name="due_date"
+          class="form-control"
+          placeholder="Due Date"
+          required="true"
+        />
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">Add Todo</button>
+      </div>
+    </div>
+  </form>
+
+  {% if todos|selectattr('completed', 'equalto', False)|list %}
+  <h2 class="mt-5">Not Completed Todos</h2>
+  <form method="GET" action="/sort_by_due_date" style="margin-top: 10px">
+    <button
+      type="submit"
+      name="sort_order"
+      value="asc"
+      class="btn btn-secondary"
+    >
+      Sort Ascending
+    </button>
+    <button
+      type="submit"
+      name="sort_order"
+      value="desc"
+      class="btn btn-secondary"
+    >
+      Sort Descending
+    </button>
+  </form>
+  <ul class="list-group">
+    {% for todo in todos %} {% if not todo.completed %}
+    <li class="list-group-item">
+      {{ todo.content }} (Due Date: {{ todo.due_date }})
+      <form
+        method="POST"
+        action="/mark_complete/{{ todo.id }}"
+        style="display: inline"
+      >
+        <button type="submit" class="btn btn-success btn-sm">
+          Mark as Complete
+        </button>
+      </form>
+      <form method="GET" action="/edit/{{ todo.id }}" style="display: inline">
+        <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+      </form>
+      <form
+        method="POST"
+        action="/delete/{{ todo.id }}"
+        style="display: inline"
+      >
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </li>
+    {% endif %} {% endfor %}
+  </ul>
+  {% endif %} {% if todos|selectattr('completed', 'equalto', True)|list %}
+  <h2 class="mt-5">Completed Todos</h2>
+  <ul class="list-group">
+    {% for todo in todos %} {% if todo.completed %}
+    <li class="list-group-item">
+      {{ todo.content }} (Due Date: {{ todo.due_date }})
+      <form
+        method="POST"
+        action="/delete/{{ todo.id }}"
+        style="display: inline"
+      >
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </li>
+    {% endif %} {% endfor %}
+  </ul>
+  {% endif %}
+
+  <form action="/logout" style="display: inline; margin-top: 5px">
+    <button type="submit" class="btn btn-secondary">Logout</button>
+  </form>
+</div>
+{% endblock %}

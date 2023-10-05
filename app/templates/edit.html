@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block title %}Edit Todo{% endblock %} {% block
+content %}
+<div class="container">
+  <h1 class="mt-5">Edit Todo</h1>
+  <form method="POST" class="mt-3">
+    <div class="form-row">
+      <div class="col-md-6">
+        <input
+          type="text"
+          name="content"
+          class="form-control"
+          placeholder="Todo"
+          value="{{ todo.content }}"
+          required="true"
+        />
+      </div>
+      <div class="col-md-3">
+        <input
+          type="date"
+          name="due_date"
+          class="form-control"
+          placeholder="Due Date"
+          value="{{ todo.due_date }}"
+          required="true"
+        />
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
